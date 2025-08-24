@@ -358,8 +358,9 @@
         <span>Community</span>
       </div>
       <nav>
-        <a href="help.html">Help</a>
-        <a id="authLink" href="login.html">Login</a>
+  <a href="help.html">Help</a>
+  <a id="authLink" href="login.html">Login</a>
+  <button id="logoutBtn" style="display:none;margin-left:1.2rem;border:1.5px solid var(--red);border-radius:6px;padding:0.3rem 1.1rem;background:#fff;color:var(--red);font-weight:700;cursor:pointer;transition:background .15s, color .15s;">Logout</button>
       </nav>
     </div>
   </header>
@@ -474,13 +475,24 @@
 
     // update nav link depending on auth state
     const authLink = document.getElementById('authLink');
+    const logoutBtn = document.getElementById('logoutBtn');
     onAuthStateChanged(auth, user => {
       if (user) {
         authLink.textContent = 'Dashboard';
         authLink.href = 'dashboard.html';
+        logoutBtn.style.display = '';
       } else {
         authLink.textContent = 'Login';
         authLink.href = 'login.html';
+        logoutBtn.style.display = 'none';
+      }
+    });
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        await auth.signOut();
+        window.location.href = 'index.html';
+      } catch (err) {
+        alert('Logout failed: ' + err.message);
       }
     });
 
